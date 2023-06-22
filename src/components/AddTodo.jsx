@@ -1,44 +1,49 @@
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/modules/todoReducer";
+import S from "../globalStyle";
 
-const AddTodo = ({ todos, setTodos }) => {
+const AddTodo = () => {
   const [title, setTitle] = useState();
   const [content, setContent] = useState();
+
+  const dispatch = useDispatch();
 
   // 추가하기
   const addBtnHandler = (event) => {
     event.preventDefault();
-    setTodos([
-      ...todos,
-      {
-        id: nanoid(),
-        title: title,
-        content: content,
-        isDone: false,
-      },
-    ]);
+    const addedtodo = {
+      id: nanoid(),
+      title: title,
+      content: content,
+      isDone: false,
+    };
+    dispatch(addTodo(addedtodo));
     setTitle("");
     setContent("");
   };
 
   return (
-    <form onSubmit={addBtnHandler}>
-      제목
-      <input
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
-      />
-      내용
-      <input
-        value={content}
-        onChange={(e) => {
-          setContent(e.target.value);
-        }}
-      />
-      <button>추가하기</button>
-    </form>
+    <S.Form onSubmit={addBtnHandler}>
+      <S.FormInputDiv>
+        제목
+        <S.FormInput
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+        내용
+        <S.FormInput
+          value={content}
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
+        />
+      </S.FormInputDiv>
+      <S.FormBtn>추가하기</S.FormBtn>
+    </S.Form>
   );
 };
 
